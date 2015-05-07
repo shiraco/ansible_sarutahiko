@@ -1,0 +1,79 @@
+---
+
+- name: copy private key
+  copy: src={{ item }} dest={{ ssh_home }}/{{ item }} owner=ubuntu group=ubuntu mode=0600
+  with_items:
+  - id_rsa.sarutahiko-server
+  - id_rsa.saruta_funnel
+  sudo: yes
+  tags: sarutahiko
+
+- name: git clone sarutahiko-server
+  git: repo=git@github.com:tech-sketch/sarutahiko-server.git dest=/tmp/sarutahiko-server version=master accept_hostkey=yes key_file={{ ssh_home }}/id_rsa.sarutahiko-server
+  sudo: sudo
+  sudo_user: root
+  tags: sarutahiko
+
+- name: mkdir app_home dir
+  file: dest={{ app_home }} state=directory owner=ubuntu group=ubuntu
+  sudo: yes
+  tags: sarutahiko
+
+- name: Move sarutahiko from /tmp to app_home
+  command: creates="{{ app_home }}/sarutahiko-server" mv /tmp/sarutahiko-server {{ app_home }}/sarutahiko-server
+  sudo: yes
+  tags: sarutahiko
+
+- name: apt-get install pkg for python ml libraries
+  apt: pkg={{ item }} state=installed
+  sudo: yes
+  with_items:
+  - gfortran
+  - libopenblas-dev
+  - libblas-dev
+  - liblapack-dev
+  tags: global_python
+
+- name: pip install requirements in 'venv'
+  pip: requirements={{ app_home }}/sarutahiko-server/requirements.txt virtualenv={{ venv_home }} virtualenv_command={{ pyenv_home }}/shims/virtualenv virtualenv_site_packages=no
+  sudo: yes
+  tags: sarutahiko
+
+- name: mkdir lib dir
+  file: dest={{ app_home }}/sarutahiko-server/lib state=directory owner=ubuntu group=ubuntu
+  sudo: yes
+  tags: sarutahiko
+
+- name: git clone saruta_funnel
+  git: repo=git@github.com:tech-sketch/saruta_funnel.git dest={{ app_home }}/sarutahiko-server/lib/saruta_funnel version=master accept_hostkey=yes key_file={{ ssh_home }}/id_rsa.saruta_funnel force=yes
+  sudo: sudo
+  tags: sarutahiko
+
+- name: saruta_funnel patch
+  replace: >
+    dest="{{ app_home }}/sarutahiko-server/lib/saruta_funnel/saruta_funnel/resource.py"
+    regexp="{{ item.regexp }}"
+    replace="{{ item.replace }}"
+  with_items:
+  - regexp: '\.\.\/data\/'
+    replace: "{{ app_home }}/sarutahiko-server/data/"
+  - regexp: 'os\.path\.dirname\(__file__\),\s*'
+    replace: ""
+  tags:
+  - sarutahiko
+  - patch
+
+- name: pip install saruta_funnel in 'venv'
+  pip: name="{{ app_home }}/sarutahiko-server/lib/saruta_funnel" virtualenv={{ venv_home }} state=latest extra_args="--editable"
+  sudo: yes
+  tags: sarutahiko
+
+- name: git clone pybrain
+  git: repo=https://github.com/pybrain/pybrain.git dest={{ app_home }}/sarutahiko-server/lib/pybrain version=master
+  sudo: sudo
+  tags: sarutahiko
+
+- name: pip install pybrain in 'venv'
+  pip: name="{{ app_home }}/sarutahiko-server/lib/pybrain" virtualenv={{ venv_home }} state=latest
+  sudo: yes
+  tags: sarutahiko

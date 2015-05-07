@@ -1,0 +1,5 @@
+---
+
+nginx_version: 1.8.0-1+trusty1
+nginx_user: nginx
+nginx_group: nginx

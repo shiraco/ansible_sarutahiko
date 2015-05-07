@@ -1,0 +1,9 @@
+---
+
+python_version: 3.4.3
+home: /usr/local
+profile: /etc/profile.d
+pyenv_home: "{{ home }}/pyenv"
+venv_home: "{{ home }}/venv"
+swap_file_path: /swapfile
+swap_file_size_mb: 1024

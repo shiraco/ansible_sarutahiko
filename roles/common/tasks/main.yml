@@ -1,0 +1,66 @@
+---
+
+- name: create swapfile
+  command: dd if=/dev/zero of={{ swap_file_path }} bs=1M count={{ swap_file_size_mb }}
+  sudo: yes
+  register: swapfile
+  when: ansible_swaptotal_mb < 1
+  tags: swapfile
+
+- name: mkswap
+  command: mkswap {{ swap_file_path }}
+  sudo: yes
+  when: ansible_swaptotal_mb < 1
+  tags: swapfile
+
+- name: swapon
+  command: swapon {{ swap_file_path }}
+  sudo: yes
+  when: ansible_swaptotal_mb < 1
+  tags: swapfile
+
+- name: apt-get updates a server
+  apt: update_cache=yes
+  sudo: yes
+  tags: apt-get
+
+- name: apt-get upgrade a server
+  apt: upgrade=full
+  sudo: yes
+  tags: apt-get
+
+- name: apt-get install basic pkg
+  apt: pkg={{ item }} state=installed
+  sudo: yes
+  with_items:
+  - git
+  - gcc
+  - build-essential
+  - zlib1g-dev
+  - libssl-dev
+  - libbz2-dev
+  - libreadline-dev
+  - libsqlite3-dev
+  tags: apt-get
+
+- name: git clone pyenv
+  git: repo=https://github.com/yyuu/pyenv.git dest={{ home }}/pyenv
+  sudo: yes
+  tags: python
+
+- name: set .bash_profile config by copying from file
+  template: src=pyenv.sh.j2 dest={{ profile }}/pyenv.sh owner=root group=root mode=0755
+  sudo: yes
+  tags: python
+
+- name: install pyenv's python and rehash
+  shell: sudo -i pyenv install -s {{ python_version }} && sudo -i pyenv rehash && sudo -i pyenv global {{ python_version }}
+  tags: python
+
+- name: pip install global python pkgs
+  pip: name={{ item }} state=latest executable={{ pyenv_home }}/shims/pip
+  sudo: yes
+  with_items:
+  - pip
+  - virtualenv
+  tags: python

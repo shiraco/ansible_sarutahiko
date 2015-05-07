@@ -1,0 +1,16 @@
+---
+
+- name: Create the application user
+  user: name={{ mongodb_user }} state=present
+  sudo: yes
+  tags: mongodb_user
+
+- name: Create the application group
+  group: name={{ mongodb_group }} system=yes state=present
+  sudo: yes
+  tags: mongodb_user
+
+- name: Add the application user to the application group
+  user: name={{ mongodb_user }} group={{ mongodb_group }} state=present
+  sudo: yes
+  tags: mongodb_user

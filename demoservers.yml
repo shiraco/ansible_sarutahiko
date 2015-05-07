@@ -1,0 +1,10 @@
+---
+
+- hosts: demoservers
+  remote_user: ubuntu
+  roles:
+  - common
+  - mongodb
+  - sarutahiko
+  - nginx
+  - supervisor

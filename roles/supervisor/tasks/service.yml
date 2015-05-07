@@ -1,0 +1,6 @@
+---
+
+- name: supervisord restart
+  supervisorctl: name=tornado-sarutahiko state=restarted
+  sudo: yes
+  tags: supervisor_service

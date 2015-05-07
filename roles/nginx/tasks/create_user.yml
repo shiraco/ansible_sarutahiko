@@ -1,0 +1,16 @@
+---
+
+- name: Create the application user
+  user: name={{ nginx_user }} state=present
+  sudo: yes
+  tags: nginx_user
+
+- name: Create the application group
+  group: name={{ nginx_group }} system=yes state=present
+  sudo: yes
+  tags: nginx_user
+
+- name: Add the application user to the application group
+  user: name={{ nginx_user }} group={{ nginx_group }} state=present
+  sudo: yes
+  tags: nginx_user

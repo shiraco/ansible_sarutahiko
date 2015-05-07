@@ -1,0 +1,7 @@
+---
+
+home: /usr/local
+venv_home: "{{ home }}/venv"
+pyenv_home: "{{ home }}/pyenv"
+ssh_home: /etc/ssh
+app_home: /var/www

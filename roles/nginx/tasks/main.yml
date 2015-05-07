@@ -1,0 +1,6 @@
+---
+
+- include: create_user.yml
+- include: install.yml
+- include: configure.yml
+- include: service.yml

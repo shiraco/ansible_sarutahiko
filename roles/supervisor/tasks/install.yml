@@ -1,0 +1,6 @@
+---
+
+- name: apt-get install supervisor
+  apt: name="supervisor={{supervisor_version}}" state=installed update_cache=yes
+  sudo: yes
+  tags: supervisor

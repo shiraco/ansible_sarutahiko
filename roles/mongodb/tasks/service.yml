@@ -1,0 +1,6 @@
+---
+
+- name: service mongod start
+  service: name=mongod state=started
+  sudo: yes
+  tags: mongodb_service

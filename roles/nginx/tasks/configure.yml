@@ -1,0 +1,12 @@
+---
+
+- name: copy nginx-sarutahiko.conf
+  copy: src=nginx-sarutahiko.conf dest=/etc/nginx/sites-available/nginx-sarutahiko.conf
+  sudo: yes
+  tags: nginx_configure
+
+- name: copy nginx-sarutahiko.conf
+  file: src=/etc/nginx/sites-available/nginx-sarutahiko.conf dest=/etc/nginx/sites-enabled/default state=link force=yes
+  sudo: yes
+  tags: nginx_configure
+  

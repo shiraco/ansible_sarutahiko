@@ -1,0 +1,37 @@
+---
+
+# - name: create supervisord.conf
+#   command: echo_supervisord_conf > /tmp/supervisord.conf
+#   sudo: yes
+#   tags: configure
+#
+# - name: Move supervisord.conf from /tmp to /etc
+#   command: creates=/etc/supervisord.conf mv /tmp/supervisord.conf /etc/
+#   sudo: yes
+#   tags: sarutahiko
+#
+# - name: updating supervisord.conf
+#   lineinfile: >
+#     dest=/etc/supervisord.conf
+#     state=present
+#     regexp="{{ item.regexp }}"
+#     line="{{ item.line }}"
+#   with_items:
+#   - regexp: '^;?\s*\[include\]\s*$'
+#     line: "[include]"
+#   - regexp: '^;?\s*files\s*=\s*.*$'
+#     line: "files = /etc/supervisord.d/*.ini"
+#   sudo: yes
+#   tags: configure
+#
+# - name: mkdir supervisord.d dir
+#   file: dest=/etc/supervisord.d state=directory
+#   sudo: yes
+#   tags: configure
+
+# for Ubuntu packages
+# http://supervisord.org/configuration.html
+- name: copy tornado-sarutahiko.conf
+  copy: src=tornado-sarutahiko.conf dest=/etc/supervisor/conf.d/tornado-sarutahiko.conf
+  sudo: yes
+  tags: configure

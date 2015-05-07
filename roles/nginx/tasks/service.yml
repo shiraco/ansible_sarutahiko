@@ -1,0 +1,8 @@
+---
+
+# 起動しない
+
+- name: service nginx start
+  service: name=nginx state=restarted
+  sudo: yes
+  tags: nginx_service

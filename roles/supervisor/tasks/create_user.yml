@@ -1,0 +1,16 @@
+---
+
+- name: Create the application user
+  user: name={{ supervisor_user }} state=present
+  sudo: yes
+  tags: supervisor_user
+
+- name: Create the application group
+  group: name={{ supervisor_group }} system=yes state=present
+  sudo: yes
+  tags: supervisor_user
+
+- name: Add the application user to the application group
+  user: name={{ supervisor_user }} group={{ supervisor_group }} state=present
+  sudo: yes
+  tags: supervisor_user

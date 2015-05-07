@@ -1,0 +1,5 @@
+---
+
+- name: db migration
+  shell: sudo -i . {{ venv_home }}/bin/activate && cd {{ app_home }}/sarutahiko-server && {{ venv_home }}/bin/python db/db_setup.py
+  tags: configure

@@ -1,0 +1,15 @@
+---
+
+- name: add-apt-repository ppa:nginx/stable
+  apt_repository: repo='ppa:nginx/stable' state=present
+  sudo: yes
+  tags: nginx
+
+- name: apt-get install nginx
+  apt: name="nginx={{nginx_version}}" state=installed update_cache=yes
+  sudo: yes
+  tags: nginx
+
+- name: fix nginx version
+  shell: echo "nginx hold" | sudo dpkg --set-selections
+  tags: nginx
