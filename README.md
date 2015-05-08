@@ -42,5 +42,5 @@ nginx | apt-get install nginx ------------------------------------------ 12.30s
 sarutahiko | git clone sarutahiko-server -------------------------------- 9.76s
 supervisor | apt-get install supervisor --------------------------------- 9.51s
 nginx | add-apt-repository ppa:nginx/stable ----------------------------- 9.21s
-52.68.178.10               : ok=45   changed=37   unreachable=0    failed=0
+xxx.xxx.xxx.xxx               : ok=45   changed=37   unreachable=0    failed=0
 ```
